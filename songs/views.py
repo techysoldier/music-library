@@ -1,6 +1,8 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
+
+import songs
 from .serializers import SongSerializer
 from .models import Songs
 from django.shortcuts import get_object_or_404
@@ -21,15 +23,15 @@ def song_list(request):
 
 @api_view(['GET', 'PUT', 'DELETE'])
 def song_detail(request, pk):
-      product = get_object_or_404(Songs, pk =pk)
+      song = get_object_or_404(Songs, pk =pk)
       if request.method == 'GET':
-        serializer = SongSerializer(product)
+        serializer = SongSerializer(song)
         return Response(serializer.data, status=status.HTTP_200_OK)
       elif request.method == 'PUT':
-        serializer = SongSerializer(product, data=request.data)
+        serializer = SongSerializer(song, data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
       elif request.method =='DELETE':
-        song_list.delete()
+        song.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)         
